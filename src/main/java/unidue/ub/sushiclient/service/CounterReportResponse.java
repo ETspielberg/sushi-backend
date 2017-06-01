@@ -11,6 +11,7 @@ package unidue.ub.sushiclient.service;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -39,6 +40,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "CounterReportResponse", namespace = "http://www.niso.org/schemas/sushi/counter", propOrder = {
     "report"
 })
+@XmlRootElement
 public class CounterReportResponse
     extends ReportResponse
 {

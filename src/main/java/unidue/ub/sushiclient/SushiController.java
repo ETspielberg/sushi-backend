@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,35 +25,40 @@ import unidue.ub.sushiclient.service.ReportItem;
 
 import unidue.ub.monitor.Process;
 import unidue.ub.monitor.connector.Connection;
-import unidue.ub.services.data.Counter;
+import unidue.ub.media.analysis.Counter;
 import static unidue.ub.services.data.connector.CounterConnector.register;
 
 @RestController
 public class SushiController {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(SushiController.class);
 
 	@RequestMapping("/fachref/sushi")
-	public Process greeting(@RequestParam(value = "id", defaultValue = "1") String id,
-			@RequestParam(value = "type", defaultValue = "update") String type) {
+	public Process getSushi(@RequestParam(value = "id", defaultValue = "1") String id,
+			@RequestParam(value = "type", defaultValue = "update") String type,
+			@RequestParam(value = "name", defaultValue = "JR1") String name) {
 		Process process = new Process();
 		process.setProcess("sushi-backend");
 		process.setIdentifier(id);
 		process.setMessage("sushi-backend.running");
 		process.setStatus("running");
 		SushiClient sushiClient = new SushiClient();
-		try {
+		/*try {
 			Connection.register(process);
 		} catch (JSONException | IOException e1) {
 			process.addMessage("error.registering.process");
 		}
+		*/
 		try {
 			List<Counter> counters = new ArrayList<>();
-			CounterReportResponse response = sushiClient.getSushi(id, type);
-			List<unidue.ub.sushiclient.service.Exception> exceptions = response.getException();
+			CounterReportResponse response = sushiClient.getSushi(id, type, name);
+			/*List<unidue.ub.sushiclient.service.Exception> exceptions = response.getException();
 			if (exceptions.size() > 0) {
 				for (unidue.ub.sushiclient.service.Exception exception : exceptions) {
 					process.addMessage(exception.getMessage());
 				}
 			}
+			*/
 			List<Report> reports = response.getReport().getReport();
 
 			for (Report report : reports) {
@@ -183,15 +190,20 @@ public class SushiController {
 					}
 				}
 			}
-			register(counters);
+			//register(counters);
 		} catch (JsonParseException e) {
-			process.setMessage("error.JSONParser");
+			process.addMessage("error.JSONParser");
+			process.setStatus("error");
 		} catch (JsonMappingException e) {
-			process.setMessage("error.JSONMapping");
+			process.addMessage("error.JSONMapping");
+			process.setStatus("error");
 		} catch (MalformedURLException e) {
-			process.setMessage("error.MalFormedURL");
+			process.addMessage("error.MalFormedURL");
+			process.setStatus("error");
 		} catch (IOException e) {
-			process.setMessage("error.IO");
+			e.printStackTrace();
+			process.addMessage("error.IO");
+			process.setStatus("error");
 		}
 		return process;
 	}
