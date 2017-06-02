@@ -56,6 +56,25 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<id>xjc</id>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<packageName>unidue.ub.sushiclient.service</packageName>
+					<wsdl>true</wsdl>
+					<xmlschema>false</xmlschema>
+					<schemaFiles>sushi.wsdl</schemaFiles>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

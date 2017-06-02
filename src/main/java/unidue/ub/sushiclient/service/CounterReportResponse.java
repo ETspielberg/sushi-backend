@@ -46,7 +46,7 @@ public class CounterReportResponse
 {
 
     @XmlElement(name = "Report", required = true, nillable = true)
-    protected Reports report;
+    protected Report report;
 
     /**
      * Gets the value of the report property.
@@ -56,7 +56,7 @@ public class CounterReportResponse
      *     {@link Reports }
      *     
      */
-    public Reports getReport() {
+    public Report getReport() {
         return report;
     }
 
@@ -68,7 +68,7 @@ public class CounterReportResponse
      *     {@link Reports }
      *     
      */
-    public void setReport(Reports value) {
+    public void setReport(Report value) {
         this.report = value;
     }
 
